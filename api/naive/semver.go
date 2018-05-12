@@ -17,37 +17,50 @@ const (
 
 // Semver is ...
 type Semver struct {
-	version string
-	major   int
-	minor   int
-	patch   int
+	major int
+	minor int
+	patch int
 }
 
 // NewSemver creates
 func NewSemver(v string) (*Semver, error) {
-	var version string
+	var major, minor, patch int
+	var err error
+
 	if v == "" {
-		version = "0.0.0"
+		v = "0.0.0"
+	} else {
+		major, minor, patch, err = validate(v)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	major, minor, patch, err := validate(v)
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println(major, minor, patch)
-
-	return &Semver{version, major, minor, patch}, nil
+	return &Semver{major, minor, patch}, nil
 }
 
 // Version returns
 func (s *Semver) Version() string {
-	return s.version
+	return fmt.Sprintf("%d.%d.%d", s.major, s.minor, s.patch)
 }
 
 // Increment increments
 func (s *Semver) Increment(l Level) (string, error) {
-	return s.version, nil
+	switch l {
+	case Patch:
+		s.patch++
+	case Minor:
+		s.patch = 0
+		s.minor++
+	case Major:
+		s.patch = 0
+		s.minor = 0
+		s.major++
+	default:
+		return "", errors.New("unsupported level")
+	}
+
+	return s.Version(), nil
 }
 
 // Validate validates
