@@ -3,3 +3,6 @@
 
 # Tools
 .vscode
+
+# Binaries
+cmd/cmd

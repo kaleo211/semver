@@ -5,14 +5,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-)
-
-type Level int
-
-const (
-	Patch Level = iota
-	Minor
-	Major
+	"strings"
 )
 
 // Semver is ...
@@ -45,14 +38,14 @@ func (s *Semver) Version() string {
 }
 
 // Increment increments
-func (s *Semver) Increment(l Level) (string, error) {
-	switch l {
-	case Patch:
+func (s *Semver) Increment(l string) (string, error) {
+	switch strings.ToLower(l) {
+	case "patch":
 		s.patch++
-	case Minor:
+	case "minor":
 		s.patch = 0
 		s.minor++
-	case Major:
+	case "major":
 		s.patch = 0
 		s.minor = 0
 		s.major++
@@ -63,7 +56,18 @@ func (s *Semver) Increment(l Level) (string, error) {
 	return s.Version(), nil
 }
 
-// Validate validates
+func (s *Semver) GetMajor() int {
+	return s.major
+}
+
+func (s *Semver) GetMinor() int {
+	return s.minor
+}
+
+func (s *Semver) GetPatch() int {
+	return s.patch
+}
+
 func validate(v string) (int, int, int, error) {
 	re := regexp.MustCompile(`([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)`)
 
@@ -72,8 +76,18 @@ func validate(v string) (int, int, int, error) {
 		return 0, 0, 0, errors.New("version is not valid")
 	}
 
-	major, _ := strconv.Atoi(matched[0][1])
+	major, err := strconv.Atoi(matched[0][1])
+	if err != nil {
+		return 0, 0, 0, errors.New("version major is not valid")
+	}
 	minor, _ := strconv.Atoi(matched[0][2])
+	if err != nil {
+		return 0, 0, 0, errors.New("version minor is not valid")
+	}
 	patch, _ := strconv.Atoi(matched[0][3])
+	if err != nil {
+		return 0, 0, 0, errors.New("version patch is not valid")
+	}
+
 	return major, minor, patch, nil
 }
