@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"strings"
 )
 
 // Semver is ...
@@ -37,35 +36,49 @@ func (s *Semver) Version() string {
 	return fmt.Sprintf("%d.%d.%d", s.major, s.minor, s.patch)
 }
 
-// Increment increments
-func (s *Semver) Increment(l string) (string, error) {
-	switch strings.ToLower(l) {
-	case "patch":
-		s.patch++
-	case "minor":
-		s.patch = 0
-		s.minor++
-	case "major":
-		s.patch = 0
-		s.minor = 0
-		s.major++
-	default:
-		return "", errors.New("unsupported level")
-	}
-
-	return s.Version(), nil
+// IncMajor increments
+func (s *Semver) IncMajor() string {
+	s.patch, s.minor = 0, 0
+	s.major++
+	return s.Version()
 }
 
-func (s *Semver) GetMajor() int {
+// IncMinor increments
+func (s *Semver) IncMinor() string {
+	s.patch = 0
+	s.minor++
+	return s.Version()
+}
+
+// IncPatch increments
+func (s *Semver) IncPatch() string {
+	s.patch++
+	return s.Version()
+}
+
+// Major returns major
+func (s *Semver) Major() int {
 	return s.major
 }
 
-func (s *Semver) GetMinor() int {
+// Minor returns minor
+func (s *Semver) Minor() int {
 	return s.minor
 }
 
-func (s *Semver) GetPatch() int {
+// Patch returns patch
+func (s *Semver) Patch() int {
 	return s.patch
+}
+
+// Validate return version if valid
+func Validate(v string) (string, error) {
+	s, err := NewSemver(v)
+	if err != nil {
+		return "", err
+	}
+
+	return s.Version(), nil
 }
 
 func validate(v string) (int, int, int, error) {

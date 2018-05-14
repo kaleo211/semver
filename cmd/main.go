@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -11,11 +12,10 @@ import (
 )
 
 func main() {
+	var level string
 
 	app := cli.NewApp()
 	app.Name = "semver"
-
-	var level string
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
@@ -31,7 +31,17 @@ func main() {
 			log.Fatal(err)
 		}
 
-		semver.Increment(level)
+		switch level {
+		case "patch":
+			semver.IncPatch()
+		case "minor":
+			semver.IncMinor()
+		case "major":
+			semver.IncMajor()
+		default:
+			return errors.New("release type is not valide")
+		}
+
 		fmt.Println(semver.Version())
 		return nil
 	}

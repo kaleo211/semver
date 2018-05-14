@@ -8,7 +8,6 @@ import (
 )
 
 var _ = Describe("Semver", func() {
-
 	Describe("NewSemver", func() {
 		Context("when version is empty", func() {
 			It("should return default value", func() {
@@ -40,8 +39,7 @@ var _ = Describe("Semver", func() {
 		Context("when increment by patch", func() {
 			It("should level patch", func() {
 				semver, _ := naive.NewSemver("1.2.3")
-				v, err := semver.Increment(naive.Patch)
-				Expect(err).ToNot(HaveOccurred())
+				v := semver.IncPatch()
 				Expect(v).To(Equal("1.2.4"))
 			})
 		})
@@ -49,8 +47,7 @@ var _ = Describe("Semver", func() {
 		Context("when increment by minor", func() {
 			It("should level minor", func() {
 				semver, _ := naive.NewSemver("1.2.3")
-				v, err := semver.Increment(naive.Minor)
-				Expect(err).ToNot(HaveOccurred())
+				v := semver.IncMinor()
 				Expect(v).To(Equal("1.3.0"))
 			})
 		})
@@ -58,8 +55,7 @@ var _ = Describe("Semver", func() {
 		Context("when increment by major", func() {
 			It("should level major", func() {
 				semver, _ := naive.NewSemver("1.2.3")
-				v, err := semver.Increment(naive.Major)
-				Expect(err).ToNot(HaveOccurred())
+				v := semver.IncMajor()
 				Expect(v).To(Equal("2.0.0"))
 			})
 		})
