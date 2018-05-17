@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// Regular expression for number
 var nre = "[0-9]|[1-9][0-9]*"
 
 // Semver is ...

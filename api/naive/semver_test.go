@@ -92,4 +92,21 @@ var _ = Describe("Semver", func() {
 			})
 		})
 	})
+
+	Describe("Validate", func() {
+		Context("when version is not valid", func() {
+			It("should return error", func() {
+				_, err := naive.Validate("a2.1b.1c")
+				Expect(err).To(HaveOccurred())
+			})
+		})
+
+		Context("when version is valid", func() {
+			It("should return error", func() {
+				version, err := naive.Validate("2.1.1")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(version).To(Equal("2.1.1"))
+			})
+		})
+	})
 })
