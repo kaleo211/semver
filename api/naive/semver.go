@@ -7,6 +7,8 @@ import (
 	"strconv"
 )
 
+var nre = "[0-9]|[1-9][0-9]*"
+
 // Semver is ...
 type Semver struct {
 	major int
@@ -71,7 +73,7 @@ func (s *Semver) Patch() int {
 	return s.patch
 }
 
-// Validate return version if valid
+// Validate version if it's valid
 func Validate(v string) (string, error) {
 	s, err := NewSemver(v)
 	if err != nil {
@@ -81,8 +83,22 @@ func Validate(v string) (string, error) {
 	return s.Version(), nil
 }
 
+// Clean none needed characters
+func Clean(v string) (string, error) {
+	versionRegexp := fmt.Sprintf("[^0-9]*((%s)\\.(%s)\\.(%s))[^0-9]*", nre, nre, nre)
+	re := regexp.MustCompile(versionRegexp)
+
+	matched := re.FindAllStringSubmatch(v, -1)
+	if len(matched) < 1 || len(matched[0]) < 2 {
+		return "", errors.New("version is not valid")
+	}
+
+	return matched[0][1], nil
+}
+
 func validate(v string) (int, int, int, error) {
-	re := regexp.MustCompile(`^([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)$`)
+	versionRegexp := fmt.Sprintf("^(%s)\\.(%s)\\.(%s)$", nre, nre, nre)
+	re := regexp.MustCompile(versionRegexp)
 
 	matched := re.FindAllStringSubmatch(v, -1)
 	if len(matched) != 1 || len(matched[0]) != 4 {

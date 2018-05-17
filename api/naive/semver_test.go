@@ -24,7 +24,7 @@ var _ = Describe("Semver", func() {
 			})
 		})
 
-		FContext("when version is not in correct format", func() {
+		Context("when version is not in correct format", func() {
 			It("should return error", func() {
 				_, err := naive.NewSemver("1.2.3.4")
 				Expect(err).To(HaveOccurred())
@@ -64,6 +64,31 @@ var _ = Describe("Semver", func() {
 				semver, _ := naive.NewSemver("1.2.3")
 				v := semver.IncMajor()
 				Expect(v).To(Equal("2.0.0"))
+			})
+		})
+	})
+
+	Describe("Clean", func() {
+		Context("when string has valid version inside", func() {
+			It("should return valid version", func() {
+				version, err := naive.Clean(" *^%v2.11.4*&^  ")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(version).To(Equal("2.11.4"))
+			})
+		})
+
+		Context("when string is valid version", func() {
+			It("should return valid version", func() {
+				version, err := naive.Clean("2.11.4")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(version).To(Equal("2.11.4"))
+			})
+		})
+
+		Context("when string had no valid version", func() {
+			It("should return error", func() {
+				_, err := naive.Clean("2.11.d4")
+				Expect(err).To(HaveOccurred())
 			})
 		})
 	})
