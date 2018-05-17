@@ -82,7 +82,7 @@ func Validate(v string) (string, error) {
 }
 
 func validate(v string) (int, int, int, error) {
-	re := regexp.MustCompile(`([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)`)
+	re := regexp.MustCompile(`^([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)\.([0-9]|[1-9][0-9]*)$`)
 
 	matched := re.FindAllStringSubmatch(v, -1)
 	if len(matched) != 1 || len(matched[0]) != 4 {

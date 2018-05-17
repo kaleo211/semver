@@ -24,6 +24,13 @@ var _ = Describe("Semver", func() {
 			})
 		})
 
+		FContext("when version is not in correct format", func() {
+			It("should return error", func() {
+				_, err := naive.NewSemver("1.2.3.4")
+				Expect(err).To(HaveOccurred())
+			})
+		})
+
 		Context("when version is valid", func() {
 			It("should return semver without error", func() {
 				validSemver := "1.2.3"
