@@ -8,7 +8,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 
-	"github.com/kaleo211/semver/api/naive"
+	"github.com/kaleo211/semver/api"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	}
 
 	app.Action = func(c *cli.Context) error {
-		semver, err := naive.NewSemver(c.Args().Get(0))
+		semver, err := api.NewSemver(c.Args().Get(0))
 		if err != nil {
 			log.Fatal(err)
 		}

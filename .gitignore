@@ -5,4 +5,4 @@
 .vscode
 
 # Binaries
-cmd/cmd
+semver/semver
