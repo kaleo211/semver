@@ -91,7 +91,7 @@ func Clean(v string) (string, error) {
 
 	matched := re.FindAllStringSubmatch(v, -1)
 	if len(matched) < 1 || len(matched[0]) < 2 {
-		return "", errors.New("version is not valid")
+		return "", errors.New("clean: version is not valid")
 	}
 
 	return matched[0][1], nil
@@ -103,7 +103,7 @@ func validate(v string) (int, int, int, error) {
 
 	matched := re.FindAllStringSubmatch(v, -1)
 	if len(matched) != 1 || len(matched[0]) != 4 {
-		return 0, 0, 0, errors.New("version is not valid")
+		return 0, 0, 0, errors.New("version is not valid ")
 	}
 
 	major, err := strconv.Atoi(matched[0][1])

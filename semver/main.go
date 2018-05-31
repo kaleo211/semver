@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -13,6 +14,7 @@ import (
 
 func main() {
 	var level string
+	var file string
 
 	app := cli.NewApp()
 	app.Name = "semver"
@@ -23,10 +25,31 @@ func main() {
 			Value:       "patch",
 			Destination: &level,
 		},
+		cli.StringFlag{
+			Name:        "file, f",
+			Value:       "./version",
+			Destination: &file,
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
-		semver, err := api.NewSemver(c.Args().Get(0))
+		var version string
+		var err error
+
+		if file != "" {
+			versionBytes, err := ioutil.ReadFile(file)
+			if err != nil {
+				return fmt.Errorf("error reading file: %+v", err)
+			}
+			version, err = api.Clean(string(versionBytes))
+			if err != nil {
+				return fmt.Errorf("error cleaning version: %+v", err)
+			}
+		} else {
+			version = c.Args().Get(0)
+		}
+
+		semver, err := api.NewSemver(version)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -42,7 +65,15 @@ func main() {
 			return errors.New("release type is not valide")
 		}
 
-		fmt.Println(semver.Version())
+		if file != "" {
+			err := ioutil.WriteFile(file, []byte(semver.Version()), 0644)
+			if err != nil {
+				return fmt.Errorf("error writing to file: %+v", err)
+			}
+			fmt.Printf("version is updated to %s\n", semver.Version())
+		} else {
+			fmt.Println(semver.Version())
+		}
 		return nil
 	}
 
