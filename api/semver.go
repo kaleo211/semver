@@ -14,4 +14,5 @@ type ISemver interface {
 	GT(ISemver) bool
 	LT(ISemver) bool
 	EQ(ISemver) bool
+	Compare(ISemver) int
 }

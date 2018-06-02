@@ -112,7 +112,7 @@ var _ = Describe("Semver", func() {
 		})
 	})
 
-	Describe("Compare", func() {
+	Describe("Comparison", func() {
 		var s1, s2, s3, s4 *api.Semver
 
 		BeforeEach(func() {
@@ -228,6 +228,26 @@ var _ = Describe("Semver", func() {
 				It("returns false", func() {
 					Expect(s1.EQ(s2)).To(BeFalse())
 					Expect(s2.EQ(s1)).To(BeFalse())
+				})
+			})
+		})
+
+		Describe("Compare", func() {
+			Context("when larger then itself", func() {
+				It("return -1", func() {
+					Expect(s1.Compare(s2)).To(Equal(-1))
+				})
+			})
+
+			Context("when smaller than itself", func() {
+				It("return 1", func() {
+					Expect(s2.Compare(s1)).To(Equal(1))
+				})
+			})
+
+			Context("when equal to itself", func() {
+				It("return 0", func() {
+					Expect(s1.Compare(s1)).To(Equal(0))
 				})
 			})
 		})

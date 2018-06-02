@@ -74,6 +74,10 @@ func (s *Semver) Patch() int {
 	return s.patch
 }
 
+/*
+ * Comparison
+ */
+
 // GT compare whether larger than passed version
 func (s *Semver) GT(v *Semver) bool {
 	if s.major != v.major {
@@ -105,6 +109,21 @@ func (s *Semver) EQ(v *Semver) bool {
 	return s.major == v.major && s.minor == v.minor && s.patch == v.patch
 }
 
+// Compare return integer
+func (s *Semver) Compare(v *Semver) int {
+	if s.EQ(v) {
+		return 0
+	}
+	if s.GT(v) {
+		return 1
+	}
+	return -1
+}
+
+/*
+ * Static Functions
+ */
+
 // Validate version if it's valid
 func Validate(v string) (string, error) {
 	s, err := NewSemver(v)
@@ -127,6 +146,10 @@ func Clean(v string) (string, error) {
 
 	return matched[0][1], nil
 }
+
+/*
+ * Private Functions
+ */
 
 func validate(v string) (int, int, int, error) {
 	versionRegexp := fmt.Sprintf("^(%s)\\.(%s)\\.(%s)$", nre, nre, nre)
