@@ -109,4 +109,72 @@ var _ = Describe("Semver", func() {
 			})
 		})
 	})
+
+	Describe("GT", func() {
+		Context("when major is greater then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("2.2.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(small.GT(large)).To(BeFalse())
+			})
+		})
+
+		Context("when minor is greater then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.3.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(small.GT(large)).To(BeFalse())
+			})
+		})
+
+		Context("when patch is greater then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.2.4")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(small.GT(large)).To(BeFalse())
+			})
+		})
+
+		Context("when major is lower then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("2.2.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(large.GT(small)).To(BeTrue())
+			})
+		})
+
+		Context("when minor is lower then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.3.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(large.GT(small)).To(BeTrue())
+			})
+		})
+
+		Context("when patch is lower then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.2.4")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(large.GT(small)).To(BeTrue())
+			})
+		})
+	})
 })
