@@ -176,5 +176,89 @@ var _ = Describe("Semver", func() {
 				Expect(large.GT(small)).To(BeTrue())
 			})
 		})
+
+		Context("when version is equal", func() {
+			It("return false", func() {
+				v, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(v.GT(v)).To(BeFalse())
+			})
+		})
+	})
+
+	Describe("LT", func() {
+		Context("when major is greater then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("2.2.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(small.LT(large)).To(BeTrue())
+			})
+		})
+
+		Context("when minor is greater then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.3.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(small.LT(large)).To(BeTrue())
+			})
+		})
+
+		Context("when patch is greater then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.2.4")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(small.LT(large)).To(BeTrue())
+			})
+		})
+
+		Context("when major is lower then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("2.2.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(large.LT(small)).To(BeFalse())
+			})
+		})
+
+		Context("when minor is lower then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.3.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(large.LT(small)).To(BeFalse())
+			})
+		})
+
+		Context("when patch is lower then itself", func() {
+			It("should return false", func() {
+				small, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+
+				large, err := api.NewSemver("1.2.4")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(large.LT(small)).To(BeFalse())
+			})
+		})
+
+		Context("when version is equal", func() {
+			It("return false", func() {
+				v, err := api.NewSemver("1.2.3")
+				Expect(err).ToNot(HaveOccurred())
+				Expect(v.LT(v)).To(BeFalse())
+			})
+		})
 	})
 })

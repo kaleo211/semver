@@ -87,6 +87,19 @@ func (s *Semver) GT(v *Semver) bool {
 	return s.patch > v.patch
 }
 
+// LT compare whether larger than passed version
+func (s *Semver) LT(v *Semver) bool {
+	if s.major != v.major {
+		return s.major < v.major
+	}
+
+	if s.minor != v.minor {
+		return s.minor < v.minor
+	}
+
+	return s.patch < v.patch
+}
+
 // Validate version if it's valid
 func Validate(v string) (string, error) {
 	s, err := NewSemver(v)
