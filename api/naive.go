@@ -100,6 +100,11 @@ func (s *Semver) LT(v *Semver) bool {
 	return s.patch < v.patch
 }
 
+// EQ compare whether equal
+func (s *Semver) EQ(v *Semver) bool {
+	return s.major == v.major && s.minor == v.minor && s.patch == v.patch
+}
+
 // Validate version if it's valid
 func Validate(v string) (string, error) {
 	s, err := NewSemver(v)
